@@ -2,18 +2,79 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"> </script>
+    <script>
+  window.addEventListener('load', () => {
+    const scene = document.querySelector('a-scene');
+
+    const flash = document.createElement('a-sphere');
+    flash.setAttribute('radius', '500');
+    flash.setAttribute('color', '#ffffff');
+    flash.setAttribute('opacity', '0');
+    flash.setAttribute('material', 'side: back; transparent: true');
+    flash.setAttribute('position', '0 0 0');
+    scene.appendChild(flash);
+
+    function thunderFlash() {
+      flash.setAttribute('opacity', '0.8');
+
+      setTimeout(() => {
+        flash.setAttribute('opacity', '0');
+      }, 100);
+
+      setTimeout(() => {
+        flash.setAttribute('opacity', '0.5');
+      }, 220);
+
+      setTimeout(() => {
+        flash.setAttribute('opacity', '0');
+      }, 320);
+
+      const nextFlash = 4000 + Math.random() * 8000;
+      setTimeout(thunderFlash, nextFlash);
+    }
+
+    setTimeout(thunderFlash, 2000);
+  });
+</script>
   </head>
   <body>
     <a-scene>
       <a-assets>
         <a-asset-item id="footsoldier" src="Assets/footsoldier.obj"></a-asset-item>
+        <a-asset-item id="footsoldier-mtl" src="Assets/footsoldier.mtl"></a-asset-item>
+        <a-asset-item id="deadtree" src="Assets/deadtree.obj"></a-asset-item>
+        <a-asset-item id="deadtree-mtl" src="Assets/deadtree.mtl"></a-asset-item>
+        <a-asset-item id="house" src="Assets/scene.gltf"></a-asset-item>
+        <img id="zombiesky" src="Assets/zombiesky.png">
       </a-assets>
 
-      <a-obj-model src="#footsoldier" position="0 0 -5" scale="1 1 1"></a-obj-model>
+      <!-- !zombies -->
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="0 0 -5" scale="1 1 1" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="5 0 -6" scale="1 1 1" rotation="0 45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="-5 0 -6" scale="1 1 1" rotation="0 -45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="5 0 -9" scale="1 1 1" rotation="0 45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="-10 0 -15" scale="1 1 1" rotation="0 -45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="-8 0 -6" scale="1 1 1" rotation="0 -45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="9 0 -9" scale="1 1 1" rotation="0 45 0"></a-obj-model>
+      <a-obj-model src="#footsoldier" mtl="#footsoldier-mtl" position="-10 0 -12" scale="1 1 1" rotation="0 -45 0"></a-obj-model>
 
-      <a-entity id="#footsoldier" position="0 0 -10" scale="1 1 1"></a-entity>
+      
+      <!-- !trees -->
+      <a-obj-model src="#deadtree" mtl="#deadtree-mtl" position="3 0 -18" scale="6 6 6"></a-obj-model>
+      <a-obj-model src="#deadtree" mtl="#deadtree-mtl" position="-5 0 -18" scale="6 6 6"></a-obj-model>
+      <a-obj-model src="#deadtree" mtl="#deadtree-mtl" position="-10 0 -10" scale="6 6 6"></a-obj-model>
+      <a-obj-model src="#deadtree" mtl="#deadtree-mtl" position="10 0 -14" scale="6 6 6"></a-obj-model>
 
-      !graves
+
+      <a-light type="ambient" color="#ffffff" intensity=".5"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="2" position="2 4 3"></a-light>
+      <a-light type="point" color="#ffffff" intensity="2" position="0 3 -2"></a-light>
+
+      <a-entity gltf-model="#house" position="15 0 -30" rotation="0 -45 0" scale="3 3 3"></a-entity>
+      <a-entity gltf-model="#house" position="-5 0 -40" rotation="0 0 0" scale="3 3 3"></a-entity>
+      <a-entity gltf-model="#house" position="-30 0 -25" rotation="0 45 0" scale="3 3 3"></a-entity>
+
+      <!-- !graves -->
       <a-box position="-2 0.6 -12" width="0.8" height="1.2" depth="0.2" color="#555"></a-box>
       <a-box position="0.3 0.6 -13" width="0.8" height="1.2" depth="0.2" color="#444"></a-box>
       <a-box position="2.5 0.6 -15" width="0.8" height="1.2" depth="0.2" color="#555"></a-box>
@@ -27,14 +88,11 @@
       <a-box position="-4 0.6 -13" width="0.8" height="1.2" depth="0.2" color="#444"></a-box>
       <a-box position="-3.5 0.6 -15" width="0.8" height="1.2" depth="0.2" color="#555"></a-box>
 
-      <!-- <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box> -->
-      <!-- <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere> -->
-      <!-- <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder> -->
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="400" height="400" color="#7BC8A4"></a-plane>
-      <a-sky color="#green"></a-sky>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="400" height="400" color="#1f2b1f"></a-plane>
+      <a-sky id="skyflash" src="#zombiesky"></a-sky>
 
-      <a-entity position="0 1.6 3">
-      !camera
+      <!-- !camera -->
+      <a-entity position="0 1.6 3">  
         <a-camera>
         <a-cursor color="red"></a-cursor>
       </a-camera>
